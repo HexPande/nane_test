@@ -108,10 +108,12 @@ function createChat() {
 
   $q.dialog({
     title: 'Create chat',
-    message: 'Write the name of the chat',
+    message: 'Write the name of the chat. The following characters are not allowed: /',
     prompt: {
       model: '',
-      isValid: val => val.length > 1 && val.length <= settings.max_room_title_length,
+      isValid: val => val.length > 1
+        && val.length <= settings.max_room_title_length
+        && val.indexOf('/') === -1,
       type: 'text'
     },
     cancel: true,

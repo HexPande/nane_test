@@ -8,14 +8,20 @@ import {userStore} from 'src/store';
 
 export default class Actions extends BaseActions<State, Getters, Mutations, Actions> {
   async load(): Promise<void> {
-    const rooms = await api.getRooms() as Room[]
+    let rooms = await api.getRooms() as Room[]
+
+    rooms = rooms.filter((room) => {
+      return room.name.indexOf('/') === -1
+    })
+
     this.mutations.setRooms(rooms)
 
     for (const room of rooms) {
       const messages = await api.getRoomHistory(room.name) as Message[]
-      for (const message of messages) {
-        this.mutations.pushMessage(message)
-      }
+      this.mutations.pushMessages({
+        room: room.name,
+        messages: messages
+      })
     }
   }
 

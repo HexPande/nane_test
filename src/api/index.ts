@@ -1,5 +1,7 @@
 import client from './axios'
 
+// TODO: Тут необходимо добавить типы и далее использовать маппинг
+
 const getSettings = () =>
   client
     .get('settings')
@@ -10,9 +12,9 @@ const getRooms = () =>
     .get('rooms')
     .then(response => response.data.result)
 
-const getRoomHistory = (roomName: string) =>
+const getRoomHistory = (room: string) =>
   client
-    .get(`rooms/${roomName}/history`)
+    .get(`rooms/${encodeURIComponent(room)}/history`)
     .then(response => response.data.result)
 
 export default {

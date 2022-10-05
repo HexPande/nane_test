@@ -20,4 +20,12 @@ export default class Mutations extends BaseMutations<State> {
       this.state.history[message.room].push(message)
     }
   }
+
+  pushMessages(payload: {room: string, messages: Message[]}): void {
+    if (!this.state.history[payload.room]) {
+      this.state.history[payload.room] = payload.messages
+    } else {
+      this.state.history[payload.room].push(...payload.messages)
+    }
+  }
 }

@@ -10,9 +10,12 @@ export default class Actions extends BaseActions<State, Getters, Mutations, Acti
     this.mutations.setUsername(username)
 
     this.state.websocket?.close()
-    const websocket = new WebSocket(`wss://nane.tada.team/ws?username=${username}`)
+
+    const websocket = new WebSocket(`wss://nane.tada.team/ws?username=${encodeURIComponent(username)}`)
+
     websocket.onmessage = function (event) {
       const payload = JSON.parse(event.data)
+
       if ('room' in payload) {
         const message = {
           room: payload.room,
@@ -26,6 +29,11 @@ export default class Actions extends BaseActions<State, Getters, Mutations, Acti
         chatStore.actions.pushMessage(message)
       }
     }
+
+    websocket.onerror = function () {
+      alert('Websocket connection error. Please reload the page');
+    }
+
     this.mutations.setWebsocket(websocket)
   }
 }
